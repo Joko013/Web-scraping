@@ -7,8 +7,6 @@ from selenium import webdriver
 import plotly.plotly as py
 import plotly.graph_objs as go
 
-#plotly.tools.set_credentials_file(username='joko013', api_key='OSKiRiLZLsJ9hWkuomCW')
-
 
 # bezrealitky sreality reality
 
@@ -21,29 +19,29 @@ class Page():
     
         #import dat z csv
     def import_from_csv(self):
-        self.lokalita = []
-        self.cena = []
-        self.velikost = []
-        self.odkaz = []
-        self.identifier = []
+        self._lokalita = []
+        self._cena = []
+        self._velikost = []
+        self._odkaz = []
+        self._identifier = []
         
         #try pro pripad, ze soubor neexistuje 
         try:            
             with open(self._file_name, newline='') as csvfile:
-                spamreader = csv.reader(csvfile, delimiter=';', quotechar='|')
-                for row in spamreader:
-                    self.lokalita.append(row[0])
-                    self.cena.append(row[1])
-                    self.velikost.append(row[2])
-                    self.odkaz.append(row[3])
-                    self.identifier.append(row[4])
+                reader = csv.reader(csvfile, delimiter=';', quotechar='|')
+                for row in reader:
+                    self._lokalita.append(row[0])
+                    self._cena.append(row[1])
+                    self._velikost.append(row[2])
+                    self._odkaz.append(row[3])
+                    self._identifier.append(row[4])
         except FileNotFoundError:
             pass
         
         #export dat do csv   
     def export_to_csv(self):
         with open(self._file_name, 'w') as csvfile:
-            for (loc,cen,vel,odk,ide) in zip(self.lokalita, self.cena, self.velikost, self.odkaz, self.identifier):
+            for (loc,cen,vel,odk,ide) in zip(self._lokalita, self._cena, self._velikost, self._odkaz, self._identifier):
                     csvfile.write(loc+';'+str(cen)+';'+vel+';'+odk+';'+str(ide)+'\n')
     
     
@@ -82,12 +80,12 @@ class Page():
 
                     id = link[link.find('id/')+3:]
                     #zkontroluju, jestli uz id neni v predchozich datech, kdyz ne, pridam do listu
-                    if id not in self.identifier:
-                        self.lokalita.append(loc)
-                        self.cena.append(p1)
-                        self.velikost.append(size)
-                        self.odkaz.append(link)
-                        self.identifier.append(id)
+                    if id not in self._identifier:
+                        self._lokalita.append(loc)
+                        self._cena.append(p1)
+                        self._velikost.append(size)
+                        self._odkaz.append(link)
+                        self._identifier.append(id)
                         self.cnt_new = self.cnt_new + 1
         
         #SREALITY
@@ -110,12 +108,12 @@ class Page():
                     id_2 = link_2[link_2.rfind("/")+1:]
 
                     #zkontroluju, jestli uz id neni v predchozich datech, kdyz ne, pridam do listu
-                    if id_2 not in self.identifier:
-                        self.lokalita.append(loc_2)
-                        self.cena.append(price_2)
-                        self.velikost.append(size_2)
-                        self.odkaz.append(link_2)
-                        self.identifier.append(id_2)
+                    if id_2 not in self._identifier:
+                        self._lokalita.append(loc_2)
+                        self._cena.append(price_2)
+                        self._velikost.append(size_2)
+                        self._odkaz.append(link_2)
+                        self._identifier.append(id_2)
                         self.cnt_new = self.cnt_new + 1        
         
         # REALITY BRNO
@@ -137,15 +135,35 @@ class Page():
                     id_3 = lnk_3[lnk_3.find('id=')+3:lnk_3.find('&')]
 
                     #zkontroluju, jestli uz id neni v predchozich datech, kdyz ne, pridam do listu
-                    if id_3 not in self.identifier:
-                        self.lokalita.append(loc_3)
-                        self.cena.append(p_3)
-                        self.velikost.append(size_3)
-                        self.odkaz.append(link_3)
-                        self.identifier.append(id_3)
+                    if id_3 not in self._identifier:
+                        self._lokalita.append(loc_3)
+                        self._cena.append(p_3)
+                        self._velikost.append(size_3)
+                        self._odkaz.append(link_3)
+                        self._identifier.append(id_3)
                         self.cnt_new = self.cnt_new + 1 
         
-        self.export_to_csv() 
+        self.export_to_csv()
+        
+        
+    @property
+    def lokalita(self):
+        return self._lokalita
+    @property
+    def cena(self):
+        return self._cena
+    @property
+    def velikost(self):
+        return self._velikost
+    @property
+    def odkaz(self):
+        return self._odkaz
+    @property
+    def identifier(self):
+        return self._identifier
+        
+       
+        
        
                    
          
