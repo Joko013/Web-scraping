@@ -1,3 +1,5 @@
+# This Python file uses the following encoding: utf-8
+
 import csv
 import requests
 from bs4 import BeautifulSoup
