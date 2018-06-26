@@ -20,37 +20,38 @@ class Scraper:
 
         # BEZREALITKY
         if page.page_name == 'bezrealitky':
-            for i in range(1, 11):
-                url = 'https://www.bezrealitky.cz/vypis/nabidka-prodej/byt/jihomoravsky-kraj/' \
-                      'okres-brno-mesto?priceFrom=&priceTo=&order=time_order_desc&submit=&page='+str(i)
-                web_page_to_scrape = requests.get(url)
-                soup = BeautifulSoup(web_page_to_scrape.content, 'html.parser')
-                details2 = soup.find_all('div', class_='details')
-
-                # pro kazdou stranku najdu lokalitu, cenu, velikost, id
-                for item in details2:
-                    header = item.find_all('h2', class_='header')[0]
-                    text_h = header.get_text()
-                    text_strip = text_h.strip()#[text_h.find('/n'):]
-
-                    loc = text_strip[text_strip.find('Oblíbený')+8:].strip()
-
-                    price = item.select_one('.price').get_text()
-                    p1 = int(price[:price.find(' Kč')].replace('.',''))
-
-                    size = item.select_one('.keys').get_text()[:-1]+'2'
-
-                    link = item.select_one('p').get_text()
-
-                    id = link[link.find('id/')+3:]
-                    # zkontroluju, jestli uz id neni v predchozich datech, kdyz ne, pridam do listu
-                    if id not in page.identifier:
-                        page.lokalita.append(loc)
-                        page.cena.append(p1)
-                        page.velikost.append(size)
-                        page.odkaz.append(link)
-                        page.identifier.append(id)
-                        self.cnt_new = self.cnt_new + 1
+            pass
+            # for i in range(1, 11):
+            #     url = 'https://www.bezrealitky.cz/vypis/nabidka-prodej/byt/jihomoravsky-kraj/' \
+            #           'okres-brno-mesto?priceFrom=&priceTo=&order=time_order_desc&submit=&page='+str(i)
+            #     web_page_to_scrape = requests.get(url)
+            #     soup = BeautifulSoup(web_page_to_scrape.content, 'html.parser')
+            #     details2 = soup.find_all('div', class_='details')
+            #
+            #     # pro kazdou stranku najdu lokalitu, cenu, velikost, id
+            #     for item in details2:
+            #         header = item.find_all('h2', class_='header')[0]
+            #         text_h = header.get_text()
+            #         text_strip = text_h.strip()#[text_h.find('/n'):]
+            #
+            #         loc = text_strip[text_strip.find('Oblíbený')+8:].strip()
+            #
+            #         price = item.select_one('.price').get_text()
+            #         p1 = int(price[:price.find(' Kč')].replace('.',''))
+            #
+            #         size = item.select_one('.keys').get_text()[:-1]+'2'
+            #
+            #         link = item.select_one('p').get_text()
+            #
+            #         id = link[link.find('id/')+3:]
+            #         # zkontroluju, jestli uz id neni v predchozich datech, kdyz ne, pridam do listu
+            #         if id not in page.identifier:
+            #             page.lokalita.append(loc)
+            #             page.cena.append(p1)
+            #             page.velikost.append(size)
+            #             page.odkaz.append(link)
+            #             page.identifier.append(id)
+            #             self.cnt_new = self.cnt_new + 1
 
         # SREALITY
         elif page.page_name == 'sreality':
