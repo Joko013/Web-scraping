@@ -1,16 +1,18 @@
 # This Python file uses the following encoding: utf-8
+import time
 
-import web_scraper
-import web_page
+import modules.mm_reality as mm
+import modules.sreality as sreal
+import modules.reality as real
+
 
 if __name__ == '__main__':
-    scrap = web_scraper.Scraper()
-    pages = ['sreality', 'reality']  # , 'bezrealitky'
+    pages = [sreal, real, mm]
+    try:
+        for name in pages:
+            name.GetScraped()
 
-    for name in pages:
-        p = web_page.Page(name)
-        p.import_from_csv()
+    finally:
+        time.sleep(5)
 
-        scrap.scrape_page(p)
-        p.export_to_csv()
 
