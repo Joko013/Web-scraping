@@ -42,14 +42,24 @@ class GetScraped(Page):
                 title = offer.find('a')['title']
                 split_title = title.split(',')
 
-                size_2 = split_title[1]
+                size_2 = split_title[1] + split_title[2][:-1]
                 loc_2 = split_title[-1]
                 price_2 = offer.select('strong.price')[0].text
                 link_2 = 'https://www.mmreality.cz' + offer.select('a')[0]['href']
                 id_2 = offer.select('a')[0]['href'][:-1].split('/')[-1]
 
-                # zkontroluju, jestli uz id neni v predchozich datech, kdyz ne, pridam do listu
-                if id_2 not in self.identifier:
+                # zmena ceny
+                try:
+                    i = self.identifier.index(id_2)
+                    if self.cena[i] != price_2:
+                        self.cena[i] = price_2
+                        self.date_created[i] = datetime.date.today()
+
+                        new_this_page += 1
+
+                        continue
+                # nova nabidka
+                except ValueError:
                     self.lokalita.append(loc_2)
                     self.cena.append(price_2)
                     self.velikost.append(size_2)
@@ -57,6 +67,9 @@ class GetScraped(Page):
                     self.identifier.append(id_2)
                     self.cnt_new += 1
                     new_this_page += 1
+
+                # nova nabidka
+
             if new_this_page == 0:
                 break
 

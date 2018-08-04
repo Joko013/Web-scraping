@@ -38,8 +38,18 @@ class GetScraped(Page):
                 link_3 = 'https://www.reality-brno.net/byty' + lnk_3
                 id_3 = lnk_3[lnk_3.find('id=') + 3:lnk_3.find('&')]
 
-                # zkontroluju, jestli uz id neni v predchozich datech, kdyz ne, pridam do listu
-                if id_3 not in self.identifier:
+                # zmena ceny
+                try:
+                    i = self.identifier.index(id_3)
+                    if self.cena[i] != p_3:
+                        self.cena[i] = p_3
+                        self.date_created[i] = datetime.date.today()
+
+                        new_this_page += 1
+
+                        continue
+                # nova nabidka
+                except ValueError:
                     self.lokalita.append(loc_3)
                     self.cena.append(p_3)
                     self.velikost.append(size_3)
@@ -47,7 +57,7 @@ class GetScraped(Page):
                     self.identifier.append(id_3)
                     self.cnt_new += 1
                     new_this_page += 1
-            if new_this_page == 0:
+
                 break
 
             dates = [datetime.date.today()] * self.cnt_new

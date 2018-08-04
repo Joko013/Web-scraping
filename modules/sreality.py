@@ -39,8 +39,18 @@ class GetScraped(Page):
                 link_2 = "https://www.sreality.cz" + title.select_one(".title").get('href')
                 id_2 = link_2[link_2.rfind("/") + 1:]
 
-                # zkontroluju, jestli uz id neni v predchozich datech, kdyz ne, pridam do listu
-                if id_2 not in self.identifier:
+                # zmena ceny
+                try:
+                    i = self.identifier.index(id_2)
+                    if self.cena[i] != price_2:
+                        self.cena[i] = price_2
+                        self.date_created[i] = datetime.date.today()
+
+                        new_this_page += 1
+
+                        continue
+                # nova nabidka
+                except ValueError:
                     self.lokalita.append(loc_2)
                     self.cena.append(price_2)
                     self.velikost.append(size_2)
@@ -48,6 +58,7 @@ class GetScraped(Page):
                     self.identifier.append(id_2)
                     self.cnt_new += 1
                     new_this_page += 1
+
             if new_this_page == 0:
                 break
 
