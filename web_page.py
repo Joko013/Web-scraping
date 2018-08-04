@@ -9,7 +9,7 @@ class Page:
     def __init__(self, page_name=None):
         self.page_name = page_name
         self._file_name = 'data_' + self.page_name + '.csv'
-        self._path = 'C:\\Users\\admin\\Web_Scraping\\' + self._file_name
+        self._path = 'C:\\Users\\admin\\Dropbox\\Byty\\' + self._file_name
 
     def import_from_csv(self):
         """
