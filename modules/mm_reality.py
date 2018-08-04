@@ -22,7 +22,6 @@ class GetScraped(Page):
         self.cnt_new = 0
         
         for i in range(1, 6):
-            new_this_page = 0
 
             url = 'https://www.mmreality.cz/nemovitosti/hledani/?&filter%5BfCategory%5D%5B%5D=10&filter%5BfEstateType' \
                   '%5D=11&filter%5BfDisposition%5D%5B%5D=200&filter%5BfDisposition%5D%5B1%5D=55&filter%5BfDisposition' \
@@ -55,9 +54,8 @@ class GetScraped(Page):
                         self.cena[i] = price_2
                         self.date_created[i] = datetime.date.today()
 
-                        new_this_page += 1
+                    continue
 
-                        continue
                 # nova nabidka
                 except ValueError:
                     self.lokalita.append(loc_2)
@@ -66,12 +64,6 @@ class GetScraped(Page):
                     self.odkaz.append(link_2)
                     self.identifier.append(id_2)
                     self.cnt_new += 1
-                    new_this_page += 1
-
-                # nova nabidka
-
-            if new_this_page == 0:
-                break
 
             dates = [datetime.date.today()] * self.cnt_new
             self.date_created.extend(dates)

@@ -22,7 +22,6 @@ class GetScraped(Page):
         self.cnt_new = 0
 
         for i in range(1, 11):
-            new_this_page = 0
             driver = webdriver.Chrome()
             url = "https://www.sreality.cz/hledani/prodej/byty/brno?stari=mesic&strana=" + str(i)
             driver.get(url)
@@ -46,9 +45,8 @@ class GetScraped(Page):
                         self.cena[i] = price_2
                         self.date_created[i] = datetime.date.today()
 
-                        new_this_page += 1
+                    continue
 
-                        continue
                 # nova nabidka
                 except ValueError:
                     self.lokalita.append(loc_2)
@@ -57,10 +55,6 @@ class GetScraped(Page):
                     self.odkaz.append(link_2)
                     self.identifier.append(id_2)
                     self.cnt_new += 1
-                    new_this_page += 1
-
-            if new_this_page == 0:
-                break
 
             dates = [datetime.date.today()] * self.cnt_new
             self.date_created.extend(dates)

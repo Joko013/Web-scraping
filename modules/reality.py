@@ -47,7 +47,8 @@ class GetScraped(Page):
 
                         new_this_page += 1
 
-                        continue
+                    continue
+
                 # nova nabidka
                 except ValueError:
                     self.lokalita.append(loc_3)
@@ -56,9 +57,6 @@ class GetScraped(Page):
                     self.odkaz.append(link_3)
                     self.identifier.append(id_3)
                     self.cnt_new += 1
-                    new_this_page += 1
-
-                break
 
             dates = [datetime.date.today()] * self.cnt_new
             self.date_created.extend(dates)
