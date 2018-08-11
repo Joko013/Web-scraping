@@ -23,6 +23,7 @@ class Page:
         self.odkaz = []
         self.identifier = []
         self.date_created = []
+        self.offer_type = []
 
         # try pro pripad, ze soubor neexistuje
         try:
@@ -35,6 +36,7 @@ class Page:
                     self.odkaz.append(row[3])
                     self.identifier.append(row[4])
                     self.date_created.append(row[5])
+                    self.offer_type.append(row[6])
         except FileNotFoundError:
             pass
 
@@ -45,7 +47,8 @@ class Page:
         """
         with open(self._path, 'w') as csvfile:
             zipped = zip(self.lokalita, self.cena,
-                          self.velikost, self.odkaz,
-                          self.identifier, self.date_created)
-            for (loc, cen, vel, odk, ide, dte) in zipped:
-                csvfile.write(loc+';'+str(cen)+';'+vel+';'+odk+';'+str(ide)+';'+str(dte)+'\n')
+                         self.velikost, self.odkaz,
+                         self.identifier, self.date_created,
+                         self.offer_type)
+            for (loc, cen, vel, odk, ide, dte, ty) in zipped:
+                csvfile.write(loc+';'+str(cen)+';'+vel+';'+odk+';'+str(ide)+';'+str(dte)+';'+str(ty)+'\n')

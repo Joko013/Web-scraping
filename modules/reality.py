@@ -6,15 +6,18 @@ from web_page import Page
 
 
 class GetScraped(Page):
-    def __init__(self):
+    def __init__(self, offer_type):
 
         super(GetScraped, self).__init__(page_name='reality')
+        self.req_offer_type = offer_type
 
         self.import_from_csv()
         self._scrape()
         self.export_to_csv()
 
-        out_msg = '{0} new listings for {1} page.'.format(self.cnt_new, self.page_name)
+        self.plural = 'bytu' if self.req_offer_type == 'byt' else 'domu'
+
+        out_msg = '{0} novych {1} na {2}.'.format(self.cnt_new, self.plural, self.page_name)
         print(out_msg)
 
     def _scrape(self):
@@ -23,7 +26,11 @@ class GetScraped(Page):
 
         for i in range(1, 11):
             new_this_page = 0
-            url = 'https://www.reality-brno.net/prodej/byty/?strana=' + str(i)
+            if self.req_offer_type == 'byt':
+                url = 'https://www.reality-brno.net/prodej/byty/?strana=' + str(i)
+            elif self.req_offer_type == 'dum':
+                url = 'https://www.reality-brno.net/prodej/rodinne-domy/mestske-domy/?strana=' + str(i)
+
             web_page_to_scrape = requests.get(url)
             soup = BeautifulSoup(web_page_to_scrape.content, 'html.parser')
             details2 = soup.select('.nem_box')
@@ -61,3 +68,5 @@ class GetScraped(Page):
             dates = [datetime.date.today()] * self.cnt_new
             self.date_created.extend(dates)
 
+            offer_types = [self.req_offer_type] * self.cnt_new
+            self.offer_type.extend(offer_types)

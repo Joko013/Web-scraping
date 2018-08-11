@@ -6,15 +6,18 @@ from web_page import Page
 
 
 class GetScraped(Page):
-    def __init__(self):
+    def __init__(self, offer_type):
 
         super(GetScraped, self).__init__(page_name='sreality')
+        self.req_offer_type = offer_type
 
         self.import_from_csv()
         self._scrape()
         self.export_to_csv()
 
-        out_msg = '{0} new listings for {1} page.'.format(self.cnt_new, self.page_name)
+        self.plural = 'bytu' if self.req_offer_type == 'byt' else 'domu'
+
+        out_msg = '{0} novych {1} na {2}.'.format(self.cnt_new, self.plural, self.page_name)
         print(out_msg)
 
     def _scrape(self):
@@ -23,7 +26,10 @@ class GetScraped(Page):
 
         for i in range(1, 11):
             driver = webdriver.Chrome()
-            url = "https://www.sreality.cz/hledani/prodej/byty/brno?stari=mesic&strana=" + str(i)
+            if self.req_offer_type == 'byt':
+                url = "https://www.sreality.cz/hledani/prodej/byty/brno?stari=mesic&strana=" + str(i)
+            elif self.req_offer_type == 'dum':
+                url = "https://www.sreality.cz/hledani/prodej/domy/brno?stari=mesic&strana=" + str(i)
             driver.get(url)
             soup = BeautifulSoup(driver.page_source, "html.parser")
             driver.quit()
@@ -32,7 +38,7 @@ class GetScraped(Page):
             for title in soup.select(".text-wrap"):
                 # num = "https://www.sreality.cz" + title.select_one(".title").get('href')
                 # print(num)
-                size_2 = title.select_one('h2  span').get_text()[:-3] + " m2"
+                size_2 = (title.select_one('h2  span').get_text()[:-3] + " m2").replace('²', '')
                 loc_2 = title.select_one("span [class='locality ng-binding']").get_text()
                 price_2 = title.select_one("span [class='norm-price ng-binding']").get_text().replace('\xa0', '')[:-2]
                 link_2 = "https://www.sreality.cz" + title.select_one(".title").get('href')
@@ -58,4 +64,7 @@ class GetScraped(Page):
 
             dates = [datetime.date.today()] * self.cnt_new
             self.date_created.extend(dates)
+
+            offer_types = [self.req_offer_type] * self.cnt_new
+            self.offer_type.extend(offer_types)
 

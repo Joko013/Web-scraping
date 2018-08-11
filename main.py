@@ -8,9 +8,11 @@ import modules.reality as real
 
 if __name__ == '__main__':
     pages = [sreal, real, mm]
+    offer_types = ['dum', 'byt']
     try:
         for name in pages:
-            name.GetScraped()
+            for _type in offer_types:
+                name.GetScraped(offer_type=_type)
 
     finally:
         time.sleep(5)
